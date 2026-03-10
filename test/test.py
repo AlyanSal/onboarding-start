@@ -3,7 +3,7 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge, ValueChange
+from cocotb.triggers import RisingEdge, Edge
 from cocotb.triggers import ClockCycles, with_timeout
 from cocotb.types import Logic
 from cocotb.types import LogicArray
@@ -182,13 +182,13 @@ async def test_pwm_freq(dut):
     await ClockCycles(dut.clk, 300)
 
     while True:
-        await ValueChange(dut.uo_out)
+        await Edge(dut.uo_out)
         if dut.uo_out.value.to_unsigned() & 1:
             t_rise1 = cocotb.utils.get_sim_time(unit='ns')
             break
 
     while True:
-        await ValueChange(dut.uo_out)
+        await Edge(dut.uo_out)
         if dut.uo_out.value.to_unsigned() & 1:
             t_rise2 = cocotb.utils.get_sim_time(unit='ns')
             break
@@ -235,19 +235,19 @@ async def test_pwm_duty(dut):
     await send_spi_transaction(dut, 1, 0x04, 128)
 
     while True:
-        await ValueChange(dut.uo_out)
+        await Edge(dut.uo_out)
         if dut.uo_out.value.to_unsigned() & 1:
             t_rise1 = cocotb.utils.get_sim_time(unit='ns')
             break
     
     while True:
-        await ValueChange(dut.uo_out)
+        await Edge(dut.uo_out)
         if not dut.uo_out.value.to_unsigned() & 1:
             t_fall = cocotb.utils.get_sim_time(unit='ns')
             break
 
     while True:
-        await ValueChange(dut.uo_out)
+        await Edge(dut.uo_out)
         if dut.uo_out.value.to_unsigned() & 1:
             t_rise2 = cocotb.utils.get_sim_time(unit='ns')
             break
@@ -269,7 +269,7 @@ async def test_pwm_duty(dut):
     assert (dut.uo_out.value.to_unsigned() & 1) == 0, "Signal Should be LOW at 0% Duty Cycle"
 
     try:
-        await with_timeout(ValueChange(dut.uo_out), 1)
+        await with_timeout(Edge(dut.uo_out), 1)
         assert False, "Error: Detected a Rising Edge During 0% Duty Cycle"
     except cocotb.triggers.SimTimeoutError:
         dut._log.info("Success: No Rising Edges Detected for 1ms")
@@ -283,7 +283,7 @@ async def test_pwm_duty(dut):
     assert (dut.uo_out.value.to_unsigned() & 1) == 1, "Signal Should be HIGH at 100% Duty Cycle"
 
     try:
-        await with_timeout(ValueChange(dut.uo_out), 1)
+        await with_timeout(Edge(dut.uo_out), 1)
         assert False, "Error: Detected Falling Edge During 100% Duty Cycle"
     except cocotb.triggers.SimTimeoutError:
         dut._log.info("Success: No Rising Edges Detected for 1ms")
