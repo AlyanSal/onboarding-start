@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Your Name
+ * Copyright (c) 2024 Alyan Salamat
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -23,7 +23,6 @@ module tt_um_uwasic_onboarding_alyan_salamat (
   assign uio_oe  = 8'hFF;
 
   // List all unused inputs to prevent warnings
-
   wire [7:0] en_reg_out_7_0;
   wire [7:0] en_reg_out_15_8;
   wire [7:0] en_reg_pwm_7_0;
