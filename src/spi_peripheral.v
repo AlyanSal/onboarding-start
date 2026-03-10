@@ -38,7 +38,7 @@ wire SCLK_posedge = SCLK_sync[1] & ~SCLK_sync[2];
 reg [15:0]  command;
 reg [4:0]   bit_count;
 
-always @ (posedge clk) begin
+always @ (posedge clk or negedge rst_n) begin
   if (!rst_n) begin
     command         <= 16'b0;
     bit_count       <= 5'b0;

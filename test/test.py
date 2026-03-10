@@ -3,7 +3,7 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge
+from cocotb.triggers import RisingEdge, FallingEdge
 from cocotb.triggers import ClockCycles
 from cocotb.types import Logic
 from cocotb.types import LogicArray
@@ -152,6 +152,13 @@ async def test_spi(dut):
 @cocotb.test()
 async def test_pwm_freq(dut):
     # Write your test here
+    dut._log.info("Starting PWM Frequency Test")
+
+    clock = Clock(dut.clk, 100, units='ns')
+    cocotb.start_soon(clock.start())
+
+
+
     dut._log.info("PWM Frequency test completed successfully")
 
 
