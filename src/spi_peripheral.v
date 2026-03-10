@@ -62,11 +62,11 @@ always @ (posedge clk) begin
         // Write Command Branch
         if (command[15] == 1'b1) begin
           case (command[14:8])
-            7'b00: en_reg_out_7_0   <= command[7:0];
-            7'b01: en_reg_out_15_8  <= command[7:0];
-            7'b02: en_pwm_out_7_0   <= command[7:0];
-            7'b03: en_pwm_out_15_8  <= command[7:0];
-            7'b04: pwm_duty_cycle   <= command[7:0];
+            7'h00: en_reg_out_7_0   <= command[7:0];
+            7'h01: en_reg_out_15_8  <= command[7:0];
+            7'h02: en_pwm_out_7_0   <= command[7:0];
+            7'h03: en_pwm_out_15_8  <= command[7:0];
+            7'h04: pwm_duty_cycle   <= command[7:0];
             default: ;
           endcase
         end
