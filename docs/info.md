@@ -9,12 +9,12 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+Developed an SPI Device Capable of Reading Commands from a Controller to Update 5 Different Registers for PWM Control
 
 ## How to test
 
-Explain how to use your project
+Use by connecting controller output wires alongside peripheral write registers
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+I Believe None, except those that need to be connected like a Controller and PWM Device
