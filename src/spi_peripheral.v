@@ -1,4 +1,4 @@
-module spi_peripheral_alyan_salamat (
+module spi_peripheral (
   input wire clk,
   input wire rst_n,
 
