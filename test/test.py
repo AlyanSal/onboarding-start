@@ -155,7 +155,7 @@ async def test_pwm_freq(dut):
     dut._log.info("Starting PWM Frequency Test")
 
     # set clock speed to 100 ns
-    clock = Clock(dut.clk, 100, unit='ns')
+    clock = Clock(dut.clk, 100, units='ns')
     cocotb.start_soon(clock.start())
 
     # Reset
@@ -183,14 +183,14 @@ async def test_pwm_freq(dut):
 
     while True:
         await Edge(dut.uo_out)
-        if dut.uo_out.value.to_unsigned() & 1:
-            t_rise1 = cocotb.utils.get_sim_time(unit='ns')
+        if dut.uo_out.value & 1:
+            t_rise1 = cocotb.utils.get_sim_time(units='ns')
             break
 
     while True:
         await Edge(dut.uo_out)
-        if dut.uo_out.value.to_unsigned() & 1:
-            t_rise2 = cocotb.utils.get_sim_time(unit='ns')
+        if dut.uo_out.value & 1:
+            t_rise2 = cocotb.utils.get_sim_time(units='ns')
             break
 
     period_ns = t_rise2 - t_rise1
@@ -209,7 +209,7 @@ async def test_pwm_duty(dut):
     dut._log.info("Starting PWM Duty Cycle Test")
 
     # set clock speed to 100 ns
-    clock = Clock(dut.clk, 100, unit='ns')
+    clock = Clock(dut.clk, 100, units='ns')
     cocotb.start_soon(clock.start())
 
     # Reset
@@ -236,20 +236,20 @@ async def test_pwm_duty(dut):
 
     while True:
         await Edge(dut.uo_out)
-        if dut.uo_out.value.to_unsigned() & 1:
-            t_rise1 = cocotb.utils.get_sim_time(unit='ns')
+        if dut.uo_out.value & 1:
+            t_rise1 = cocotb.utils.get_sim_time(units='ns')
             break
     
     while True:
         await Edge(dut.uo_out)
-        if not dut.uo_out.value.to_unsigned() & 1:
-            t_fall = cocotb.utils.get_sim_time(unit='ns')
+        if not dut.uo_out.value & 1:
+            t_fall = cocotb.utils.get_sim_time(units='ns')
             break
 
     while True:
         await Edge(dut.uo_out)
-        if dut.uo_out.value.to_unsigned() & 1:
-            t_rise2 = cocotb.utils.get_sim_time(unit='ns')
+        if dut.uo_out.value & 1:
+            t_rise2 = cocotb.utils.get_sim_time(units='ns')
             break
 
     period_ns = t_rise2 - t_rise1
@@ -266,12 +266,12 @@ async def test_pwm_duty(dut):
     await send_spi_transaction(dut, 1, 0x04, 0)
     await ClockCycles(dut.clk, 30)
 
-    assert (dut.uo_out.value.to_unsigned() & 1) == 0, "Signal Should be LOW at 0% Duty Cycle"
+    assert (dut.uo_out.value & 1) == 0, "Signal Should be LOW at 0% Duty Cycle"
 
     try:
         await with_timeout(Edge(dut.uo_out), 1)
         assert False, "Error: Detected a Rising Edge During 0% Duty Cycle"
-    except cocotb.triggers.SimTimeoutError:
+    except cocotb.result.SimTimeoutError:
         dut._log.info("Success: No Rising Edges Detected for 1ms")
 
 
@@ -280,12 +280,12 @@ async def test_pwm_duty(dut):
     await send_spi_transaction(dut, 1, 0x04, 0xFF)
     await ClockCycles(dut.clk, 30)
     
-    assert (dut.uo_out.value.to_unsigned() & 1) == 1, "Signal Should be HIGH at 100% Duty Cycle"
+    assert (dut.uo_out.value & 1) == 1, "Signal Should be HIGH at 100% Duty Cycle"
 
     try:
         await with_timeout(Edge(dut.uo_out), 1)
         assert False, "Error: Detected Falling Edge During 100% Duty Cycle"
-    except cocotb.triggers.SimTimeoutError:
+    except cocotb.result.SimTimeoutError:
         dut._log.info("Success: No Rising Edges Detected for 1ms")
 
 
