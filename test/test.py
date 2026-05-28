@@ -3,7 +3,7 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import RisingEdge, Edge
+from cocotb.triggers import RisingEdge, FallingEdge, Edge
 from cocotb.triggers import ClockCycles, with_timeout
 from cocotb.types import Logic
 from cocotb.types import LogicArray
@@ -181,17 +181,13 @@ async def test_pwm_freq(dut):
 
     await ClockCycles(dut.clk, 300)
 
-    while True:
-        await Edge(dut.uo_out)
-        if dut.uo_out.value & 1:
-            t_rise1 = cocotb.utils.get_sim_time(units='ns')
-            break
+    await RisingEdge(dut.pwm_out)
+    t_rise1 = cocotb.utils.get_sim_time(units='ns')
 
-    while True:
-        await Edge(dut.uo_out)
-        if dut.uo_out.value & 1:
-            t_rise2 = cocotb.utils.get_sim_time(units='ns')
-            break
+    await FallingEdge(dut.pwm_out)
+
+    await RisingEdge(dut.pwm_out)
+    t_rise2 = cocotb.utils.get_sim_time(units='ns')
 
     period_ns = t_rise2 - t_rise1
 
